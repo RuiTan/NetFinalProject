@@ -4,11 +4,15 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using System.Runtime.InteropServices;
 
 namespace NetFinalProject.Controllers
 {
     public class ValuesController : ApiController
     {
+        [DllImport("TIMEUTIL.dll", CallingConvention = CallingConvention.Cdecl, EntryPoint = "?FormatTime@@YAPADH@Z")]
+        extern static string FormatTime(int id);
+
         // GET api/values
         public IEnumerable<string> Get()
         {
@@ -16,9 +20,11 @@ namespace NetFinalProject.Controllers
         }
 
         // GET api/values/5
-        public string Get(int id)
+        public int Get(int id)
         {
-            return "value";
+            int a = new ClassLibrary1.Class1().Add(1, 2);
+            //return new Test().Add(id);
+            return a;
         }
 
         // POST api/values

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="63b6fe69b0cb403189e5a4d7b98638d6" Name="Diagram1">
+        <EntityTypeShape EntityType="MovieModel.Comment" Width="1.5" PointX="0.75" PointY="7.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="MovieModel.Feedback" Width="1.5" PointX="3" PointY="3.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MovieModel.Like" Width="1.5" PointX="3" PointY="1" IsExpanded="true" />
+        <EntityTypeShape EntityType="MovieModel.Movie" Width="1.5" PointX="0.75" PointY="11.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="MovieModel.Person" Width="1.5" PointX="3" PointY="11.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MovieModel.Rate" Width="1.5" PointX="3" PointY="7" IsExpanded="true" />
+        <EntityTypeShape EntityType="MovieModel.User" Width="1.5" PointX="0.75" PointY="3.75" IsExpanded="true" />
+        <AssociationConnector Association="MovieModel.feedback_comment" ManuallyRouted="false" />
+        <AssociationConnector Association="MovieModel.like_comment" ManuallyRouted="false" />
+        <AssociationConnector Association="MovieModel.feedback_user" ManuallyRouted="false" />
+        <AssociationConnector Association="MovieModel.like_user" ManuallyRouted="false" />
+        <AssociationConnector Association="MovieModel.rate_movie" ManuallyRouted="false" />
+        <AssociationConnector Association="MovieModel.rate_user" ManuallyRouted="false" />
+        <AssociationConnector Association="MovieModel.Direct" ManuallyRouted="false" />
+        <AssociationConnector Association="MovieModel.Play" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
