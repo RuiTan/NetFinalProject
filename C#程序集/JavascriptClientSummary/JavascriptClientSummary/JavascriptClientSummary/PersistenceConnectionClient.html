@@ -1,0 +1,62 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>基于PersistentConnection的调用客户端示例</title>
+	<meta charset="utf-8" />
+</head>
+<body>
+    <input type="text" id="txtMessage" /><input type="button" value="发送" id="btnSend"/>
+    <br/>
+    <textarea rows="20" cols="100" id="txtResponse"></textarea>
+    <script src="/Scripts/jquery-1.6.4.min.js"></script>
+    <script src="/Scripts/jquery.signalR-2.2.0.min.js"></script>
+    <script type="text/javascript">
+        $(function () {
+            var username = prompt("Your username");
+
+            // 设置Cookie值
+            document.cookie = "username=" + username;
+
+            // 创建连接
+            //var connection = $.connection("/message");
+
+            // 创建链接带查询字符串
+            var connection = $.connection("/messageConnection", { username: "qs" + username });
+
+            var connected = false;
+            connection.logging = true;
+
+            // 开启连接
+            connection.start()
+                .done(function () {
+                    connected = true;
+                })
+                .fail(function () {
+                    alert("连接失败");
+                });
+
+            // 接收服务器推送
+            connection.received(function (message) {
+                var txtResponse = $("#txtResponse")
+                var originalResponse = txtResponse.val();
+                var totalReponse = originalResponse + message + "\n";
+                txtResponse.val(totalReponse);
+            })
+
+            // 发送请求
+            $("#btnSend").click(function () {
+                if (!connected) {
+                    alert("没有开启连接");
+                    return false;
+                }
+                var message = $("#txtMessage").val();
+                if (message == "") {
+                    alert("请输入内容");
+                    return false;
+                }
+                connection.send(message);
+            });
+        });
+    </script>
+</body>
+</html>

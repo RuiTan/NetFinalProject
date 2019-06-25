@@ -1,0 +1,68 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>基于Hub使用非生成代理对象的调用客户端示例</title>
+	<meta charset="utf-8" />
+</head>
+<body>
+    <input type="text" id="txtMessage" /><input type="button" value="发送" id="btnSend" />
+    <br />
+    <textarea rows="20" cols="100" id="txtResponse"></textarea>
+    <script src="/Scripts/jquery-1.6.4.min.js"></script>
+    <script src="/Scripts/jquery.signalR-2.2.0.min.js"></script>
+    <script type="text/javascript">
+        $(function () {
+            var username = prompt("Your username");
+
+            // 设置Cookie值
+            document.cookie = "username=" + username;
+
+            // 创建连接
+            var connection = $.hubConnection();
+            connection.url = "/messageHub";
+
+            // 设置查询字符串
+            connection.qs = { username: "qs" + username };
+
+            var connected = false;
+            connection.logging = true;
+
+            // 获取代理
+            var proxy = connection.createHubProxy("MessageService");
+            // 设置state的值
+            proxy.state.ClientType = "HubNonAutoProxy";
+
+            // 客户端方法
+            proxy.on("hello", function (message) {
+                var txtResponse = $("#txtResponse")
+                var originalResponse = txtResponse.val();
+                var totalReponse = originalResponse + message + "\n";
+                txtResponse.val(totalReponse);
+            });
+
+            // 开启连接
+            connection.start()
+                .done(function () {
+                    connected = true;
+                })
+                .fail(function () {
+                    alert("连接失败");
+                });
+
+            //发送请求
+            $("#btnSend").click(function () {
+                if (!connected) {
+                    alert("没有开启连接");
+                    return false;
+                }
+                var message = $("#txtMessage").val();
+                if (message == "") {
+                    alert("请输入内容");
+                    return false;
+                }
+                proxy.invoke("hello", message);
+            });
+        });
+    </script>
+</body>
+</html>

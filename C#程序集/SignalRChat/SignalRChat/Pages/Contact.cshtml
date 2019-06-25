@@ -1,0 +1,61 @@
+﻿@page
+<html lang="en">
+
+<head>
+    <title>聊天室</title>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
+    <link href="semantic/dist/semantic.min.css" rel="stylesheet" />
+    <link href="css/main.css" rel="stylesheet" />
+    <link href="css/chat-page.css" rel="stylesheet" />
+</head>
+
+<body>
+    <div id="contextWrap">
+        <div class="stretched row">
+            <div class="sixteen wide tablet sixteen wide computer column">
+                <div class="ui segments">
+                    <div class="ui segment">
+                        <h5 class="ui header">
+                            Chat
+                        </h5>
+                    </div>
+                    <div class="ui segment">
+
+                        <div class="chat">
+                            <div class="chat-header clearfix">
+                                <img class="ui circular image"
+                                    src="http://getme.guitoubing.top/Fs4KgRKTtghhJYL84Fvkm1DiX0Dv" alt="avatar" />
+
+                                <div class="chat-about">
+                                    <div class="chat-with">Chat in NET体系结构讨论组</div>
+                                    <div class="chat-num-messages">already <span id="recordCount"></span> messages</div>
+                                </div>
+                                <i class="fa fa-star"></i>
+                            </div> <!-- end chat-header -->
+
+                            <div class="chat-history">
+                                <ul id="messagesList">
+                                    
+                                </ul>
+                            </div> <!-- end chat-history -->
+
+                            <div class="ui fluid action input">
+                                <input id="messageInput" type="text" placeholder="Text your message...">
+                                <div id="sendButton" class="ui button">Send</div>
+                            </div>
+                        </div> <!-- end chat -->
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--maincontent-->
+    </div>
+    
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/signalr/dist/browser/signalr.js"></script>
+    <script src="~/js/chat.js"></script>
+</body>
+
+</html>

@@ -22,9 +22,9 @@ namespace NetFinalProject.Controllers
         // GET api/values/5
         public int Get(int id)
         {
-            int a = new ClassLibrary1.Class1().Add(1, 2);
+            //int a = new ClassLibrary1.Class1().Add(1, 2);
             //return new Test().Add(id);
-            return a;
+            return 1;
         }
 
         // POST api/values

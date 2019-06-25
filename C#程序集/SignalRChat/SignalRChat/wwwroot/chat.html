@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>聊天室</title>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
+    <link href="semantic/dist/semantic.min.css" rel="stylesheet" />
+    <link href="plugins/ionicons/css/ionicons.min.css" rel="stylesheet" />
+    <link href="css/main.css" rel="stylesheet" />
+    <link href="plugins/pacejs/pace.css" rel="stylesheet" />
+    <link href="css/chat-page.css" rel="stylesheet" />
+</head>
+
+<body>
+    <div id="contextWrap">
+        <div class="stretched row">
+            <div class="sixteen wide tablet sixteen wide computer column">
+                <div class="ui segments">
+                    <div class="ui segment">
+                        <h5 class="ui header">
+                            Chat
+                        </h5>
+                    </div>
+                    <div class="ui segment">
+
+                        <div class="chat">
+                            <div class="chat-header clearfix">
+                                <img class="ui circular image"
+                                    src="http://getme.guitoubing.top/Fs4KgRKTtghhJYL84Fvkm1DiX0Dv" alt="avatar" />
+
+                                <div class="chat-about">
+                                    <div class="chat-with">Chat in NET体系结构讨论组</div>
+                                    <div class="chat-num-messages">already <span id="recordCount"></span> messages</div>
+                                </div>
+                                <i class="fa fa-star"></i>
+                            </div> <!-- end chat-header -->
+
+                            <div class="chat-history">
+                                <ul id="messagesList">
+                                    <li class="clearfix">
+                                        <div class="message-data align-right">
+                                            <span class="message-data-name">Olia</span> <i class="icon circle me"></i>
+                                        </div>
+                                        <div class="message other-message float-right">
+                                            Hi Vincent, how are you? How is the project coming along?
+                                        </div>
+                                    </li>
+
+                                    <li>
+                                        <div class="message-data">
+                                            <span class="message-data-name"><i class="icon circle online"></i>
+                                                Vincent</span>
+                                            <span class="message-data-time">10:12 AM, Today</span>
+                                        </div>
+                                        <div class="message my-message">
+                                            Are we meeting today? Project has been already finished and I have results
+                                            to show you.
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div> <!-- end chat-history -->
+
+                            <div class="ui fluid action input">
+                                <input id="messageInput" type="text" placeholder="Text your message...">
+                                <div id="sendButton" class="ui button">Send</div>
+                            </div>
+                        </div> <!-- end chat -->
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--maincontent-->
+    </div>
+    <script src="lib/signalr/dist/browser/signalr.js"></script>
+    <script src="js/chat.js"></script>
+</body>
+
+</html>

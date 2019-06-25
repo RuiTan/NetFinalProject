@@ -1,4 +1,4 @@
 #pragma once
 #include <stdio.h>
 #include <time.h>
-__declspec(dllexport) char* FormatTime(int t);
+__declspec(dllexport) void MD5(char* in, char* out);

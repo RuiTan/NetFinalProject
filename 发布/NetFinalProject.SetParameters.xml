@@ -1,0 +1,5 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<parameters>
+  <setParameter name="IIS Web Application Name" value="NetFinalProject" />
+  <setParameter name="MovieEntities-Web.config Connection String" value="metadata=res://*/Models.MovieModel.csdl|res://*/Models.MovieModel.ssdl|res://*/Models.MovieModel.msl;provider=MySql.Data.MySqlClient;provider connection string=&quot;server=nanasenishino.cn;user id=root;password=gccant@dao6Ihao!;persistsecurityinfo=True;Charset=utf8;database=movie_bak&quot;" />
+</parameters>

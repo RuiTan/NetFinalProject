@@ -4,34 +4,31 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="MovieModel.Store" Provider="MySql.Data.MySqlClient" ProviderManifestToken="5.6" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="MovieModel.Store" Provider="MySql.Data.MySqlClient" ProviderManifestToken="5.6" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="Comment">
           <Key>
             <PropertyRef Name="id" />
           </Key>
-          <Property Name="id" Type="int" Nullable="false" />
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="movie_id" Type="int" />
+          <Property Name="user_id" Type="int" />
           <Property Name="title" Type="varchar" MaxLength="20" />
           <Property Name="content" Type="varchar" MaxLength="2000" Nullable="false" />
           <Property Name="time" Type="datetime" Precision="0" />
           <Property Name="cover" Type="varchar" MaxLength="200" />
           <Property Name="likes" Type="int" />
           <Property Name="comments" Type="int" />
-        </EntityType>
-        <EntityType Name="Direct">
-          <Key>
-            <PropertyRef Name="person_id" />
-            <PropertyRef Name="movie_id" />
-          </Key>
-          <Property Name="person_id" Type="int" Nullable="false" />
-          <Property Name="movie_id" Type="int" Nullable="false" />
+          <Property Name="intro" Type="varchar" MaxLength="100" />
         </EntityType>
         <EntityType Name="Feedback">
           <Key>
             <PropertyRef Name="id" />
           </Key>
-          <Property Name="id" Type="int" Nullable="false" />
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="comment_id" Type="int" Nullable="false" />
           <Property Name="user_id" Type="int" Nullable="false" />
+          <Property Name="at_id" Type="int" />
+          <Property Name="reply_id" Type="int" Nullable="false" />
           <Property Name="content" Type="varchar" MaxLength="200" Nullable="false" />
           <Property Name="time" Type="datetime" Precision="0" />
         </EntityType>
@@ -46,33 +43,18 @@
           <Key>
             <PropertyRef Name="id" />
           </Key>
-          <Property Name="id" Type="int" Nullable="false" />
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="name" Type="varchar" MaxLength="50" Nullable="false" />
-          <Property Name="intro" Type="varchar" MaxLength="300" />
+          <Property Name="intro" Type="varchar" MaxLength="500" />
           <Property Name="length" Type="int" />
           <Property Name="year" Type="int" />
           <Property Name="rate" Type="float" />
           <Property Name="genres" Type="varchar" MaxLength="200" />
           <Property Name="pictures" Type="varchar" MaxLength="2000" />
           <Property Name="regions" Type="varchar" MaxLength="200" />
-        </EntityType>
-        <EntityType Name="Person">
-          <Key>
-            <PropertyRef Name="id" />
-          </Key>
-          <Property Name="id" Type="int" Nullable="false" />
-          <Property Name="name" Type="varchar" MaxLength="20" Nullable="false" />
-          <Property Name="intro" Type="varchar" MaxLength="200" />
-          <Property Name="birthday" Type="datetime" Precision="0" />
-          <Property Name="starsign" Type="varchar" MaxLength="10" />
-        </EntityType>
-        <EntityType Name="Play">
-          <Key>
-            <PropertyRef Name="person_id" />
-            <PropertyRef Name="movie_id" />
-          </Key>
-          <Property Name="person_id" Type="int" Nullable="false" />
-          <Property Name="movie_id" Type="int" Nullable="false" />
+          <Property Name="stars" Type="varchar" MaxLength="1000" />
+          <Property Name="directors" Type="varchar" MaxLength="1000" />
+          <Property Name="likes" Type="int" />
         </EntityType>
         <EntityType Name="Rate">
           <Key>
@@ -83,40 +65,46 @@
           <Property Name="movie_id" Type="int" Nullable="false" />
           <Property Name="score" Type="int" Nullable="false" />
         </EntityType>
+        <EntityType Name="Record">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="user_id" Type="int" />
+          <Property Name="movie_id" Type="int" />
+          <Property Name="time" Type="datetime" Precision="0" />
+          <Property Name="content" Type="varchar" MaxLength="1000" />
+        </EntityType>
         <EntityType Name="User">
           <Key>
             <PropertyRef Name="id" />
           </Key>
-          <Property Name="id" Type="int" Nullable="false" />
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="email" Type="varchar" MaxLength="20" Nullable="false" />
           <Property Name="name" Type="varchar" MaxLength="20" />
           <Property Name="password" Type="varchar" MaxLength="20" Nullable="false" />
         </EntityType>
-        <Association Name="direct_movie">
-          <End Role="Movie" Type="Self.Movie" Multiplicity="1">
-            <OnDelete Action="Cascade" />
-          </End>
-          <End Role="Direct" Type="Self.Direct" Multiplicity="*" />
+        <Association Name="Comment_Movie_id_fk">
+          <End Role="Movie" Type="Self.Movie" Multiplicity="0..1" />
+          <End Role="Comment" Type="Self.Comment" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Movie">
               <PropertyRef Name="id" />
             </Principal>
-            <Dependent Role="Direct">
+            <Dependent Role="Comment">
               <PropertyRef Name="movie_id" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="direct_person">
-          <End Role="Person" Type="Self.Person" Multiplicity="1">
-            <OnDelete Action="Cascade" />
-          </End>
-          <End Role="Direct" Type="Self.Direct" Multiplicity="*" />
+        <Association Name="Comment_User_id_fk">
+          <End Role="User" Type="Self.User" Multiplicity="0..1" />
+          <End Role="Comment" Type="Self.Comment" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="Person">
+            <Principal Role="User">
               <PropertyRef Name="id" />
             </Principal>
-            <Dependent Role="Direct">
-              <PropertyRef Name="person_id" />
+            <Dependent Role="Comment">
+              <PropertyRef Name="user_id" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -176,34 +164,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="play_movie">
-          <End Role="Movie" Type="Self.Movie" Multiplicity="1">
-            <OnDelete Action="Cascade" />
-          </End>
-          <End Role="Play" Type="Self.Play" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Movie">
-              <PropertyRef Name="id" />
-            </Principal>
-            <Dependent Role="Play">
-              <PropertyRef Name="movie_id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="play_person">
-          <End Role="Person" Type="Self.Person" Multiplicity="1">
-            <OnDelete Action="Cascade" />
-          </End>
-          <End Role="Play" Type="Self.Play" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Person">
-              <PropertyRef Name="id" />
-            </Principal>
-            <Dependent Role="Play">
-              <PropertyRef Name="person_id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="rate_movie">
           <End Role="Movie" Type="Self.Movie" Multiplicity="1">
             <OnDelete Action="Cascade" />
@@ -232,23 +192,45 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="Record_Movie_id_fk">
+          <End Role="Movie" Type="Self.Movie" Multiplicity="0..1" />
+          <End Role="Record" Type="Self.Record" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Movie">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Record">
+              <PropertyRef Name="movie_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="Record_User_id_fk">
+          <End Role="User" Type="Self.User" Multiplicity="0..1" />
+          <End Role="Record" Type="Self.Record" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Record">
+              <PropertyRef Name="user_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <EntityContainer Name="MovieModelStoreContainer">
           <EntitySet Name="Comment" EntityType="Self.Comment" Schema="movie_bak" store:Type="Tables" />
-          <EntitySet Name="Direct" EntityType="Self.Direct" Schema="movie_bak" store:Type="Tables" />
           <EntitySet Name="Feedback" EntityType="Self.Feedback" Schema="movie_bak" store:Type="Tables" />
           <EntitySet Name="Like" EntityType="Self.Like" Schema="movie_bak" store:Type="Tables" />
           <EntitySet Name="Movie" EntityType="Self.Movie" Schema="movie_bak" store:Type="Tables" />
-          <EntitySet Name="Person" EntityType="Self.Person" Schema="movie_bak" store:Type="Tables" />
-          <EntitySet Name="Play" EntityType="Self.Play" Schema="movie_bak" store:Type="Tables" />
           <EntitySet Name="Rate" EntityType="Self.Rate" Schema="movie_bak" store:Type="Tables" />
+          <EntitySet Name="Record" EntityType="Self.Record" Schema="movie_bak" store:Type="Tables" />
           <EntitySet Name="User" EntityType="Self.User" Schema="movie_bak" store:Type="Tables" />
-          <AssociationSet Name="direct_movie" Association="Self.direct_movie">
+          <AssociationSet Name="Comment_Movie_id_fk" Association="Self.Comment_Movie_id_fk">
             <End Role="Movie" EntitySet="Movie" />
-            <End Role="Direct" EntitySet="Direct" />
+            <End Role="Comment" EntitySet="Comment" />
           </AssociationSet>
-          <AssociationSet Name="direct_person" Association="Self.direct_person">
-            <End Role="Person" EntitySet="Person" />
-            <End Role="Direct" EntitySet="Direct" />
+          <AssociationSet Name="Comment_User_id_fk" Association="Self.Comment_User_id_fk">
+            <End Role="User" EntitySet="User" />
+            <End Role="Comment" EntitySet="Comment" />
           </AssociationSet>
           <AssociationSet Name="feedback_comment" Association="Self.feedback_comment">
             <End Role="Comment" EntitySet="Comment" />
@@ -266,14 +248,6 @@
             <End Role="User" EntitySet="User" />
             <End Role="Like" EntitySet="Like" />
           </AssociationSet>
-          <AssociationSet Name="play_movie" Association="Self.play_movie">
-            <End Role="Movie" EntitySet="Movie" />
-            <End Role="Play" EntitySet="Play" />
-          </AssociationSet>
-          <AssociationSet Name="play_person" Association="Self.play_person">
-            <End Role="Person" EntitySet="Person" />
-            <End Role="Play" EntitySet="Play" />
-          </AssociationSet>
           <AssociationSet Name="rate_movie" Association="Self.rate_movie">
             <End Role="Movie" EntitySet="Movie" />
             <End Role="Rate" EntitySet="Rate" />
@@ -282,9 +256,16 @@
             <End Role="User" EntitySet="User" />
             <End Role="Rate" EntitySet="Rate" />
           </AssociationSet>
+          <AssociationSet Name="Record_Movie_id_fk" Association="Self.Record_Movie_id_fk">
+            <End Role="Movie" EntitySet="Movie" />
+            <End Role="Record" EntitySet="Record" />
+          </AssociationSet>
+          <AssociationSet Name="Record_User_id_fk" Association="Self.Record_User_id_fk">
+            <End Role="User" EntitySet="User" />
+            <End Role="Record" EntitySet="Record" />
+          </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="MovieModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -292,27 +273,34 @@
           <Key>
             <PropertyRef Name="id" />
           </Key>
-          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="title" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
           <Property Name="content" Type="String" MaxLength="2000" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="time" Type="DateTime" />
           <Property Name="cover" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
           <Property Name="likes" Type="Int32" />
           <Property Name="comments" Type="Int32" />
+          <Property Name="intro" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="Feedback" Relationship="Self.feedback_comment" FromRole="Comment" ToRole="Feedback" />
           <NavigationProperty Name="Like" Relationship="Self.like_comment" FromRole="Comment" ToRole="Like" />
+          <Property Name="movie_id" Type="Int32" />
+          <NavigationProperty Name="Movie" Relationship="MovieModel.Comment_Movie_id_fk" FromRole="Comment" ToRole="Movie" />
+          <Property Name="user_id" Type="Int32" />
+          <NavigationProperty Name="User" Relationship="MovieModel.Comment_User_id_fk" FromRole="Comment" ToRole="User" />
         </EntityType>
         <EntityType Name="Feedback">
           <Key>
             <PropertyRef Name="id" />
           </Key>
-          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="comment_id" Type="Int32" Nullable="false" />
           <Property Name="user_id" Type="Int32" Nullable="false" />
           <Property Name="content" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="time" Type="DateTime" />
           <NavigationProperty Name="Comment" Relationship="Self.feedback_comment" FromRole="Feedback" ToRole="Comment" />
           <NavigationProperty Name="User" Relationship="Self.feedback_user" FromRole="Feedback" ToRole="User" />
+          <Property Name="at_id" Type="Int32" />
+          <Property Name="reply_id" Type="Int32" Nullable="false" />
         </EntityType>
         <EntityType Name="Like">
           <Key>
@@ -327,7 +315,7 @@
           <Key>
             <PropertyRef Name="id" />
           </Key>
-          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="intro" Type="String" MaxLength="300" FixedLength="false" Unicode="false" />
           <Property Name="length" Type="Int32" />
@@ -336,21 +324,12 @@
           <Property Name="genres" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
           <Property Name="pictures" Type="String" MaxLength="2000" FixedLength="false" Unicode="false" />
           <Property Name="regions" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="stars" Type="String" MaxLength="1000" FixedLength="false" Unicode="false" />
+          <Property Name="directors" Type="String" MaxLength="1000" FixedLength="false" Unicode="false" />
+          <Property Name="likes" Type="Int32" />
           <NavigationProperty Name="Rate1" Relationship="Self.rate_movie" FromRole="Movie" ToRole="Rate" />
-          <NavigationProperty Name="Person" Relationship="Self.Direct" FromRole="Movie" ToRole="Person" />
-          <NavigationProperty Name="Person1" Relationship="Self.Play" FromRole="Movie" ToRole="Person" />
-        </EntityType>
-        <EntityType Name="Person">
-          <Key>
-            <PropertyRef Name="id" />
-          </Key>
-          <Property Name="id" Type="Int32" Nullable="false" />
-          <Property Name="name" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="intro" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
-          <Property Name="birthday" Type="DateTime" />
-          <Property Name="starsign" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="Movie" Relationship="Self.Direct" FromRole="Person" ToRole="Movie" />
-          <NavigationProperty Name="Movie1" Relationship="Self.Play" FromRole="Person" ToRole="Movie" />
+          <NavigationProperty Name="Comment" Relationship="MovieModel.Comment_Movie_id_fk" FromRole="Movie" ToRole="Comment" />
+          <NavigationProperty Name="Record" Relationship="MovieModel.Record_Movie_id_fk" FromRole="Movie" ToRole="Record" />
         </EntityType>
         <EntityType Name="Rate">
           <Key>
@@ -367,13 +346,15 @@
           <Key>
             <PropertyRef Name="id" />
           </Key>
-          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="email" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="name" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
           <Property Name="password" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
           <NavigationProperty Name="Feedback" Relationship="Self.feedback_user" FromRole="User" ToRole="Feedback" />
           <NavigationProperty Name="Like" Relationship="Self.like_user" FromRole="User" ToRole="Like" />
           <NavigationProperty Name="Rate" Relationship="Self.rate_user" FromRole="User" ToRole="Rate" />
+          <NavigationProperty Name="Comment" Relationship="MovieModel.Comment_User_id_fk" FromRole="User" ToRole="Comment" />
+          <NavigationProperty Name="Record" Relationship="MovieModel.Record_User_id_fk" FromRole="User" ToRole="Record" />
         </EntityType>
         <Association Name="feedback_comment">
           <End Role="Comment" Type="Self.Comment" Multiplicity="1">
@@ -459,20 +440,11 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="Direct">
-          <End Role="Movie" Type="Self.Movie" Multiplicity="*" />
-          <End Role="Person" Type="Self.Person" Multiplicity="*" />
-        </Association>
-        <Association Name="Play">
-          <End Role="Movie" Type="Self.Movie" Multiplicity="*" />
-          <End Role="Person" Type="Self.Person" Multiplicity="*" />
-        </Association>
         <EntityContainer Name="MovieEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="Comment" EntityType="Self.Comment" />
           <EntitySet Name="Feedback" EntityType="Self.Feedback" />
           <EntitySet Name="Like" EntityType="Self.Like" />
           <EntitySet Name="Movie" EntityType="Self.Movie" />
-          <EntitySet Name="Person" EntityType="Self.Person" />
           <EntitySet Name="Rate" EntityType="Self.Rate" />
           <EntitySet Name="User" EntityType="Self.User" />
           <AssociationSet Name="feedback_comment" Association="Self.feedback_comment">
@@ -499,15 +471,84 @@
             <End Role="User" EntitySet="User" />
             <End Role="Rate" EntitySet="Rate" />
           </AssociationSet>
-          <AssociationSet Name="Direct" Association="Self.Direct">
+          <AssociationSet Name="Comment_Movie_id_fk" Association="MovieModel.Comment_Movie_id_fk">
             <End Role="Movie" EntitySet="Movie" />
-            <End Role="Person" EntitySet="Person" />
+            <End Role="Comment" EntitySet="Comment" />
           </AssociationSet>
-          <AssociationSet Name="Play" Association="Self.Play">
+          <AssociationSet Name="Comment_User_id_fk" Association="MovieModel.Comment_User_id_fk">
+            <End Role="User" EntitySet="User" />
+            <End Role="Comment" EntitySet="Comment" />
+          </AssociationSet>
+          <EntitySet Name="Record" EntityType="MovieModel.Record" />
+          <AssociationSet Name="Record_Movie_id_fk" Association="MovieModel.Record_Movie_id_fk">
             <End Role="Movie" EntitySet="Movie" />
-            <End Role="Person" EntitySet="Person" />
+            <End Role="Record" EntitySet="Record" />
+          </AssociationSet>
+          <AssociationSet Name="Record_User_id_fk" Association="MovieModel.Record_User_id_fk">
+            <End Role="User" EntitySet="User" />
+            <End Role="Record" EntitySet="Record" />
           </AssociationSet>
         </EntityContainer>
+        <Association Name="Comment_Movie_id_fk">
+          <End Type="MovieModel.Movie" Role="Movie" Multiplicity="0..1" />
+          <End Type="MovieModel.Comment" Role="Comment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Movie">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Comment">
+              <PropertyRef Name="movie_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="Comment_User_id_fk">
+          <End Type="MovieModel.User" Role="User" Multiplicity="0..1" />
+          <End Type="MovieModel.Comment" Role="Comment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Comment">
+              <PropertyRef Name="user_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="Record">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="user_id" Type="Int32" />
+          <Property Name="movie_id" Type="Int32" />
+          <Property Name="time" Type="DateTime" />
+          <Property Name="content" Type="String" MaxLength="1000" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Movie" Relationship="MovieModel.Record_Movie_id_fk" FromRole="Record" ToRole="Movie" />
+          <NavigationProperty Name="User" Relationship="MovieModel.Record_User_id_fk" FromRole="Record" ToRole="User" />
+        </EntityType>
+        <Association Name="Record_Movie_id_fk">
+          <End Type="MovieModel.Movie" Role="Movie" Multiplicity="0..1" />
+          <End Type="MovieModel.Record" Role="Record" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Movie">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Record">
+              <PropertyRef Name="movie_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="Record_User_id_fk">
+          <End Type="MovieModel.User" Role="User" Multiplicity="0..1" />
+          <End Type="MovieModel.Record" Role="Record" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Record">
+              <PropertyRef Name="user_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -517,6 +558,8 @@
           <EntitySetMapping Name="Comment">
             <EntityTypeMapping TypeName="MovieModel.Comment">
               <MappingFragment StoreEntitySet="Comment">
+                <ScalarProperty Name="user_id" ColumnName="user_id" />
+                <ScalarProperty Name="movie_id" ColumnName="movie_id" />
                 <ScalarProperty Name="id" ColumnName="id" />
                 <ScalarProperty Name="title" ColumnName="title" />
                 <ScalarProperty Name="content" ColumnName="content" />
@@ -524,12 +567,15 @@
                 <ScalarProperty Name="cover" ColumnName="cover" />
                 <ScalarProperty Name="likes" ColumnName="likes" />
                 <ScalarProperty Name="comments" ColumnName="comments" />
+                <ScalarProperty Name="intro" ColumnName="intro" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Feedback">
             <EntityTypeMapping TypeName="MovieModel.Feedback">
               <MappingFragment StoreEntitySet="Feedback">
+                <ScalarProperty Name="reply_id" ColumnName="reply_id" />
+                <ScalarProperty Name="at_id" ColumnName="at_id" />
                 <ScalarProperty Name="id" ColumnName="id" />
                 <ScalarProperty Name="comment_id" ColumnName="comment_id" />
                 <ScalarProperty Name="user_id" ColumnName="user_id" />
@@ -558,17 +604,9 @@
                 <ScalarProperty Name="genres" ColumnName="genres" />
                 <ScalarProperty Name="pictures" ColumnName="pictures" />
                 <ScalarProperty Name="regions" ColumnName="regions" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Person">
-            <EntityTypeMapping TypeName="MovieModel.Person">
-              <MappingFragment StoreEntitySet="Person">
-                <ScalarProperty Name="id" ColumnName="id" />
-                <ScalarProperty Name="name" ColumnName="name" />
-                <ScalarProperty Name="intro" ColumnName="intro" />
-                <ScalarProperty Name="birthday" ColumnName="birthday" />
-                <ScalarProperty Name="starsign" ColumnName="starsign" />
+                <ScalarProperty Name="stars" ColumnName="stars" />
+                <ScalarProperty Name="directors" ColumnName="directors" />
+                <ScalarProperty Name="likes" ColumnName="likes" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -591,22 +629,17 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <AssociationSetMapping Name="Direct" TypeName="MovieModel.Direct" StoreEntitySet="Direct">
-            <EndProperty Name="Movie">
-              <ScalarProperty Name="id" ColumnName="movie_id" />
-            </EndProperty>
-            <EndProperty Name="Person">
-              <ScalarProperty Name="id" ColumnName="person_id" />
-            </EndProperty>
-          </AssociationSetMapping>
-          <AssociationSetMapping Name="Play" TypeName="MovieModel.Play" StoreEntitySet="Play">
-            <EndProperty Name="Movie">
-              <ScalarProperty Name="id" ColumnName="movie_id" />
-            </EndProperty>
-            <EndProperty Name="Person">
-              <ScalarProperty Name="id" ColumnName="person_id" />
-            </EndProperty>
-          </AssociationSetMapping>
+          <EntitySetMapping Name="Record">
+            <EntityTypeMapping TypeName="MovieModel.Record">
+              <MappingFragment StoreEntitySet="Record">
+                <ScalarProperty Name="content" ColumnName="content" />
+                <ScalarProperty Name="time" ColumnName="time" />
+                <ScalarProperty Name="movie_id" ColumnName="movie_id" />
+                <ScalarProperty Name="user_id" ColumnName="user_id" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
